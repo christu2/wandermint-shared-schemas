@@ -11,10 +11,15 @@ const path = require('path');
 const SCHEMAS_DIR = path.join(__dirname, '../schemas/core');
 const OUTPUT_DIR = path.join(__dirname, '../types/generated/Swift');
 const OUTPUT_FILE = path.join(OUTPUT_DIR, 'WanderMintSchemas.swift');
+const SWIFT_PACKAGE_DIR = path.join(__dirname, '../Sources/WanderMintSchemas');
+const SWIFT_PACKAGE_FILE = path.join(SWIFT_PACKAGE_DIR, 'WanderMintSchemas.swift');
 
-// Ensure output directory exists
+// Ensure output directories exist
 if (!fs.existsSync(OUTPUT_DIR)) {
   fs.mkdirSync(OUTPUT_DIR, { recursive: true });
+}
+if (!fs.existsSync(SWIFT_PACKAGE_DIR)) {
+  fs.mkdirSync(SWIFT_PACKAGE_DIR, { recursive: true });
 }
 
 console.log('🔨 Generating Swift enums from JSON schemas...\n');
@@ -152,8 +157,11 @@ public struct SchemaMetadata {
 `;
 
   fs.writeFileSync(OUTPUT_FILE, swiftCode);
+  fs.writeFileSync(SWIFT_PACKAGE_FILE, swiftCode);
 
-  console.log(`✅ Swift enums generated at: ${OUTPUT_FILE}`);
+  console.log(`✅ Swift enums generated at:`);
+  console.log(`   - ${OUTPUT_FILE}`);
+  console.log(`   - ${SWIFT_PACKAGE_FILE} (for Swift Package Manager)`);
 
   console.log('\n📋 Generated enums:');
   console.log(`   - Budget (${budgetSchema.enum.length} cases)`);

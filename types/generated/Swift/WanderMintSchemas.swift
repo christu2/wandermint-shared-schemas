@@ -1,6 +1,6 @@
 // AUTO-GENERATED CODE - DO NOT EDIT MANUALLY
 // Generated from: shared-schemas/schemas/core/*.schema.json
-// Generation Date: 2026-01-03T02:34:25.006Z
+// Generation Date: 2026-01-03T03:09:24.972Z
 //
 // IMPORTANT: This file is auto-generated from shared schemas.
 // To modify types, edit the source JSON schemas and regenerate.
