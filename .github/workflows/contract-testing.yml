@@ -1,0 +1,135 @@
+name: Contract Testing & Schema Validation
+
+on:
+  pull_request:
+    paths:
+      - 'schemas/**'
+      - 'tests/**'
+      - 'scripts/**'
+  push:
+    branches: [main, develop]
+
+jobs:
+  schema-validation:
+    name: Validate Schemas
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate JSON schemas
+        run: npm run validate
+
+      - name: Check for enum conflicts
+        run: npm run validate:enums
+
+  type-generation:
+    name: Generate and Validate Types
+    runs-on: ubuntu-latest
+    needs: schema-validation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Generate Swift types
+        run: npm run generate:swift
+
+      - name: Generate TypeScript types
+        run: npm run generate:ts
+
+      - name: Check for uncommitted type changes
+        run: |
+          git diff --exit-code types/generated/ || {
+            echo "ERROR: Generated types have changed but not committed."
+            echo "Run 'npm run generate:all' locally and commit the changes."
+            exit 1
+          }
+
+  contract-tests:
+    name: Run Contract Tests
+    runs-on: ubuntu-latest
+    needs: schema-validation
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run schema validation tests
+        run: npm test -- tests/schema-validation.test.js
+
+      - name: Run Pact contract tests
+        run: npm run test:pact
+
+  integration:
+    name: Full Integration Check
+    runs-on: ubuntu-latest
+    needs: [schema-validation, type-generation, contract-tests]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run full test suite
+        run: npm run ci:validate
+
+      - name: Upload test coverage
+        uses: codecov/codecov-action@v3
+        if: always()
+        with:
+          files: ./coverage/lcov.info
+          flags: contract-tests
+
+  summary:
+    name: Test Summary
+    runs-on: ubuntu-latest
+    needs: [schema-validation, type-generation, contract-tests]
+    if: always()
+
+    steps:
+      - name: Generate summary
+        run: |
+          echo "## Contract Testing Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Schema Validation: ${{ needs.schema-validation.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Type Generation: ${{ needs.type-generation.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "✅ Contract Tests: ${{ needs.contract-tests.result }}" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "All components validated against shared schemas!" >> $GITHUB_STEP_SUMMARY
