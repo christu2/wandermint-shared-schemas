@@ -1,6 +1,5 @@
 // AUTO-GENERATED CODE - DO NOT EDIT MANUALLY
 // Generated from: shared-schemas/schemas/core/*.schema.json
-// Generation Date: 2026-01-03T02:33:39.232Z
 // Generator: json-schema-to-typescript
 //
 // IMPORTANT: This file is auto-generated from shared schemas.

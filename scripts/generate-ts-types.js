@@ -33,7 +33,6 @@ async function generateTypes() {
   try {
     let allTypes = `// AUTO-GENERATED CODE - DO NOT EDIT MANUALLY
 // Generated from: shared-schemas/schemas/core/*.schema.json
-// Generation Date: ${new Date().toISOString()}
 // Generator: json-schema-to-typescript
 //
 // IMPORTANT: This file is auto-generated from shared schemas.

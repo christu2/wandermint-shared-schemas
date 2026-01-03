@@ -36,7 +36,6 @@ try {
   // Generate Swift code
   const swiftCode = `// AUTO-GENERATED CODE - DO NOT EDIT MANUALLY
 // Generated from: shared-schemas/schemas/core/*.schema.json
-// Generation Date: ${new Date().toISOString()}
 //
 // IMPORTANT: This file is auto-generated from shared schemas.
 // To modify types, edit the source JSON schemas and regenerate.
