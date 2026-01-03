@@ -1,14 +1,23 @@
 {
-  "name": "wandermint-shared-schemas",
+  "name": "@wandermint/shared-schemas",
   "version": "1.0.0",
   "description": "Single source of truth for WanderMint data schemas across iOS, Backend, and Admin",
   "main": "index.js",
+  "types": "types/generated/TypeScript/schemas.d.ts",
+  "files": [
+    "index.js",
+    "schemas/",
+    "types/generated/",
+    "README.md",
+    "LICENSE"
+  ],
   "scripts": {
     "validate": "node scripts/validate-all-schemas.js",
     "validate:enums": "node scripts/validate-enum-conflicts.js",
     "generate:swift": "node scripts/generate-swift-types-simple.js",
     "generate:ts": "node scripts/generate-ts-types.js",
     "generate:all": "npm run generate:swift && npm run generate:ts",
+    "sync:ios": "./scripts/sync-ios-types.sh",
     "sync": "node scripts/sync-to-platforms.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
@@ -17,21 +26,30 @@
     "test:contracts": "npm run test:pact && npm run test:integration",
     "mock:server": "node mocks/mock-server.js",
     "ci:validate": "npm run validate && npm run validate:enums && npm test",
-    "ci:generate": "npm run generate:all && git diff --exit-code types/generated/"
+    "ci:generate": "npm run generate:all && git diff --exit-code types/generated/",
+    "prepublishOnly": "npm run ci:validate && npm run generate:all"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christu2/wandermint-shared-schemas.git"
+  },
+  "homepage": "https://github.com/christu2/wandermint-shared-schemas#readme",
+  "bugs": {
+    "url": "https://github.com/christu2/wandermint-shared-schemas/issues"
   },
   "keywords": [
     "contract-testing",
     "schema-validation",
     "type-generation",
-    "wandermint"
+    "wandermint",
+    "json-schema",
+    "ajv"
   ],
   "author": "WanderMint Team",
   "license": "MIT",
   "dependencies": {
     "ajv": "^8.12.0",
-    "ajv-formats": "^2.1.1",
-    "json-schema": "^0.4.0",
-    "json-schema-to-typescript": "^13.1.1"
+    "ajv-formats": "^2.1.1"
   },
   "devDependencies": {
     "@jest/globals": "^29.7.0",
@@ -39,6 +57,8 @@
     "@stoplight/prism-cli": "^5.5.2",
     "express": "^4.18.2",
     "jest": "^29.7.0",
+    "json-schema": "^0.4.0",
+    "json-schema-to-typescript": "^13.1.1",
     "quicktype-core": "^23.0.82",
     "shelljs": "^0.8.5"
   },
