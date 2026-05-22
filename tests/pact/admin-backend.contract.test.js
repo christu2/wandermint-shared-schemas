@@ -40,10 +40,22 @@ describe('Admin → Backend Contract: Recommendation Creation', () => {
           numberOfNights: 7
         }
       ],
+      logistics: {
+        transportSegments: [],
+        bookingDeadlines: [],
+        generalInstructions: ''
+      },
       totalCost: {
         totalEstimate: 5000,
+        flights: 2000,
+        accommodation: 2000,
+        activities: 0,
+        food: 500,
+        localTransport: 300,
+        miscellaneous: 200,
         currency: 'USD'
-      }
+      },
+      _schemaVersion: '2.0.0'
     };
 
     const valid = validateRecommendation(adminRecommendation);
@@ -101,6 +113,20 @@ describe('Admin → Backend Contract: Recommendation Creation', () => {
           ]
         }
       ],
+      logistics: {
+        transportSegments: [
+          {
+            id: 'seg-1',
+            fromCity: 'New York',
+            toCity: 'Nice',
+            departureDate: '2026-06-15',
+            segmentType: 'outbound',
+            transportOptions: []
+          }
+        ],
+        bookingDeadlines: [],
+        generalInstructions: 'Arrive at airport 3 hours early'
+      },
       totalCost: {
         totalEstimate: 10000,
         flights: 2000,
@@ -111,7 +137,9 @@ describe('Admin → Backend Contract: Recommendation Creation', () => {
         miscellaneous: 500,
         currency: 'USD'
       },
-      specialNotes: 'Book restaurants in advance'
+      specialNotes: 'Book restaurants in advance',
+      _schemaVersion: '2.0.0',
+      _lastModifiedBy: 'admin_dashboard'
     };
 
     const valid = validateRecommendation(adminRecommendation);

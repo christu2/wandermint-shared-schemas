@@ -8,6 +8,7 @@
     "id",
     "tripOverview",
     "destinations",
+    "logistics",
     "totalCost"
   ],
   "properties": {
@@ -68,11 +69,11 @@
                 "priority": {
                   "type": "integer",
                   "minimum": 1,
-                  "maximum": 5
+                  "maximum": 10
                 },
                 "hotel": {
                   "type": "object",
-                  "required": ["name", "rating", "location"],
+                  "required": ["name", "rating", "pricePerNight", "location", "bookingUrl"],
                   "properties": {
                     "name": {
                       "type": "string",
@@ -189,23 +190,53 @@
                 }
               }
             }
-          },
-          "logistics": {
+          }
+        }
+      }
+    },
+    "logistics": {
+      "type": "object",
+      "required": ["transportSegments"],
+      "properties": {
+        "transportSegments": {
+          "type": "array",
+          "items": {
             "type": "object",
             "properties": {
-              "flights": {"type": "array"},
-              "trains": {"type": "array"},
-              "buses": {"type": "array"},
-              "ferries": {"type": "array"},
-              "carRentals": {"type": "array"}
+              "id": {"type": "string"},
+              "fromCity": {"type": "string"},
+              "toCity": {"type": "string"},
+              "departureDate": {"type": "string"},
+              "segmentType": {"type": "string"},
+              "transportOptions": {
+                "type": "array",
+                "items": {
+                  "type": "object",
+                  "properties": {
+                    "id": {"type": "string"},
+                    "type": {"type": "string", "enum": ["flight", "train", "bus", "ferry", "car_rental"]},
+                    "bookingReference": {"type": "string"},
+                    "cost": {"type": "number"},
+                    "details": {"type": "object"}
+                  }
+                }
+              }
             }
           }
+        },
+        "bookingDeadlines": {
+          "type": "array",
+          "items": {"type": "object"}
+        },
+        "generalInstructions": {
+          "type": "string",
+          "maxLength": 5000
         }
       }
     },
     "totalCost": {
       "type": "object",
-      "required": ["totalEstimate", "currency"],
+      "required": ["totalEstimate", "flights", "accommodation", "activities", "food", "localTransport", "miscellaneous", "currency"],
       "properties": {
         "totalEstimate": {
           "type": "number",
@@ -257,11 +288,34 @@
     "specialNotes": {
       "type": "string",
       "maxLength": 2000
+    },
+    "_schemaVersion": {
+      "type": "string",
+      "description": "Schema version for tracking compatibility",
+      "examples": ["2.0.0"]
+    },
+    "_lastModifiedBy": {
+      "type": "string",
+      "description": "Component that last modified this recommendation",
+      "examples": ["admin_dashboard", "ios_app"]
     }
   },
-  "version": "1.0.0",
-  "lastUpdated": "2026-01-02",
+  "version": "2.0.0",
+  "lastUpdated": "2026-05-03",
   "changelog": [
+    {
+      "version": "2.0.0",
+      "date": "2026-05-03",
+      "changes": [
+        "BREAKING: Added logistics as required field at root level",
+        "BREAKING: Updated totalCost required fields to include all cost categories",
+        "Updated hotel priority maximum from 5 to 10",
+        "Updated hotel required fields to include pricePerNight and bookingUrl",
+        "Added _schemaVersion and _lastModifiedBy metadata fields",
+        "Added complete logistics.transportSegments schema definition"
+      ],
+      "breaking": true
+    },
     {
       "version": "1.0.0",
       "date": "2026-01-02",
