@@ -276,14 +276,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -313,14 +313,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         }
       ]
@@ -344,14 +336,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -381,14 +373,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -410,14 +394,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -447,14 +431,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         }
       ]
@@ -478,14 +454,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -515,14 +491,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -544,14 +512,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -581,14 +549,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -610,14 +570,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -647,14 +607,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         }
       ]
@@ -678,14 +630,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -715,14 +667,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -744,14 +688,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -781,14 +725,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -810,14 +746,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -847,14 +783,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -876,14 +804,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -913,14 +841,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         }
       ]
@@ -944,14 +864,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -981,14 +901,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -1010,14 +922,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -1047,14 +959,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -1076,14 +980,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -1113,14 +1017,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -1142,14 +1038,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -1179,14 +1075,6 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         },
         {
@@ -1208,14 +1096,14 @@ export interface TripRecommendation {
             hotel: {
               name: string;
               rating: number;
-              pricePerNight?: number;
+              pricePerNight: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
                * HTTP or HTTPS URL
                */
-              bookingUrl?: string;
+              bookingUrl: string;
               detailedDescription?: string;
               tripadvisorId?: string;
               /**
@@ -1245,25 +1133,42 @@ export interface TripRecommendation {
             description: string;
             [k: string]: any | undefined;
           }[];
-          logistics?: {
-            flights?: any[];
-            trains?: any[];
-            buses?: any[];
-            ferries?: any[];
-            carRentals?: any[];
-            [k: string]: any | undefined;
-          };
           [k: string]: any | undefined;
         }
       ];
+  logistics: {
+    transportSegments: {
+      id?: string;
+      fromCity?: string;
+      toCity?: string;
+      departureDate?: string;
+      segmentType?: string;
+      transportOptions?: {
+        id?: string;
+        type?: 'flight' | 'train' | 'bus' | 'ferry' | 'car_rental';
+        bookingReference?: string;
+        cost?: number;
+        details?: {
+          [k: string]: any | undefined;
+        };
+        [k: string]: any | undefined;
+      }[];
+      [k: string]: any | undefined;
+    }[];
+    bookingDeadlines?: {
+      [k: string]: any | undefined;
+    }[];
+    generalInstructions?: string;
+    [k: string]: any | undefined;
+  };
   totalCost: {
     totalEstimate: number;
-    flights?: number;
-    accommodation?: number;
-    activities?: number;
-    food?: number;
-    localTransport?: number;
-    miscellaneous?: number;
+    flights: number;
+    accommodation: number;
+    activities: number;
+    food: number;
+    localTransport: number;
+    miscellaneous: number;
     /**
      * ISO 4217 currency code (3 uppercase letters)
      */
@@ -1279,6 +1184,14 @@ export interface TripRecommendation {
     [k: string]: any | undefined;
   };
   specialNotes?: string;
+  /**
+   * Schema version for tracking compatibility
+   */
+  _schemaVersion?: string;
+  /**
+   * Component that last modified this recommendation
+   */
+  _lastModifiedBy?: string;
   [k: string]: any | undefined;
 }
 
