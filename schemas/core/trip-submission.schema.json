@@ -100,6 +100,16 @@
         "hybrid"
       ],
       "description": "Payment preference"
+    },
+    "petFriendly": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether pet-friendly accommodations and activities are required"
+    },
+    "optInEmailNotifications": {
+      "type": "boolean",
+      "default": true,
+      "description": "Whether the user wants to receive email notifications when the trip is ready"
     }
   },
   "version": "2.0.0",
