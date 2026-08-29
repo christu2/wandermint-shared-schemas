@@ -110,6 +110,15 @@
                       "type": "string",
                       "maxLength": 5000
                     },
+                    "photoUrl": {
+                      "$ref": "common-types.schema.json#/$defs/URL"
+                    },
+                    "photos": {
+                      "type": "array",
+                      "items": {
+                        "type": "string"
+                      }
+                    },
                     "tripadvisorId": {
                       "type": "string",
                       "maxLength": 50
@@ -155,6 +164,18 @@
                 "category": {
                   "type": "string",
                   "maxLength": 50
+                },
+                "website": {
+                  "$ref": "common-types.schema.json#/$defs/URL"
+                },
+                "yelpUrl": {
+                  "$ref": "common-types.schema.json#/$defs/URL"
+                },
+                "tripadvisorUrl": {
+                  "$ref": "common-types.schema.json#/$defs/URL"
+                },
+                "bookingUrl": {
+                  "$ref": "common-types.schema.json#/$defs/URL"
                 }
               }
             }
@@ -187,6 +208,12 @@
                 "description": {
                   "type": "string",
                   "maxLength": 2000
+                },
+                "yelpUrl": {
+                  "$ref": "common-types.schema.json#/$defs/URL"
+                },
+                "website": {
+                  "$ref": "common-types.schema.json#/$defs/URL"
                 }
               }
             }

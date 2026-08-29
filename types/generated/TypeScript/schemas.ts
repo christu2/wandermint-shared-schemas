@@ -234,6 +234,14 @@ export interface TripSubmission {
    * Payment preference
    */
   paymentMethod?: 'cash' | 'points' | 'hybrid';
+  /**
+   * Whether pet-friendly accommodations and activities are required
+   */
+  petFriendly?: boolean;
+  /**
+   * Whether the user wants to receive email notifications when the trip is ready
+   */
+  optInEmailNotifications?: boolean;
   [k: string]: any | undefined;
 }
 
@@ -285,6 +293,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -302,6 +315,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -311,6 +340,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -345,6 +382,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -362,6 +404,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -371,6 +429,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -403,6 +469,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -420,6 +491,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -429,6 +516,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -463,6 +558,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -480,6 +580,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -489,6 +605,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -521,6 +645,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -538,6 +667,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -547,6 +692,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -579,6 +732,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -596,6 +754,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -605,6 +779,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -639,6 +821,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -656,6 +843,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -665,6 +868,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -697,6 +908,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -714,6 +930,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -723,6 +955,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -755,6 +995,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -772,6 +1017,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -781,6 +1042,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -813,6 +1082,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -830,6 +1104,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -839,6 +1129,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -873,6 +1171,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -890,6 +1193,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -899,6 +1218,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -931,6 +1258,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -948,6 +1280,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -957,6 +1305,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -989,6 +1345,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -1006,6 +1367,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -1015,6 +1392,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -1047,6 +1432,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -1064,6 +1454,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -1073,6 +1479,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -1105,6 +1519,11 @@ export interface TripRecommendation {
                */
               bookingUrl: string;
               detailedDescription?: string;
+              /**
+               * HTTP or HTTPS URL
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
                * HTTP or HTTPS URL
@@ -1122,6 +1541,22 @@ export interface TripRecommendation {
             estimatedCost: number;
             estimatedDuration: string;
             category: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
@@ -1131,6 +1566,14 @@ export interface TripRecommendation {
             location: string;
             priceRange: '$' | '$$' | '$$$' | '$$$$';
             description: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP or HTTPS URL
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
