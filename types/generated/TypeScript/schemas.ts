@@ -24,24 +24,13 @@
  */
 export type Budget = 'Budget' | 'Comfortable' | 'Mid-range' | 'Luxury' | 'Ultra-Luxury';
 
-
 // TravelStyle
 /**
  * Travel preference style or pace - defines the TYPE and PACE of travel, NOT the budget
  */
 export type TravelStyle = 'Budget' | 'Comfortable' | 'Luxury' | 'Adventure' | 'Relaxation';
 
-
 // TripSubmission
-/**
- * Budget preference level (NOT a monetary amount)
- */
-export type Budget = 'Budget' | 'Comfortable' | 'Mid-range' | 'Luxury' | 'Ultra-Luxury';
-/**
- * Travel style preference (pace and type)
- */
-export type TravelStyle = 'Budget' | 'Comfortable' | 'Luxury' | 'Adventure' | 'Relaxation';
-
 /**
  * User trip submission from iOS app - sent to Backend submitTrip endpoint
  */
@@ -234,9 +223,16 @@ export interface TripSubmission {
    * Payment preference
    */
   paymentMethod?: 'cash' | 'points' | 'hybrid';
+  /**
+   * Whether pet-friendly accommodations and activities are required
+   */
+  petFriendly?: boolean;
+  /**
+   * Whether the user wants to receive email notifications when the trip is ready
+   */
+  optInEmailNotifications?: boolean;
   [k: string]: any | undefined;
 }
-
 
 // TripRecommendation
 /**
@@ -252,8 +248,12 @@ export interface TripRecommendation {
    */
   tripOverview: string;
   /**
+   * Points transfer strategies, redemption instructions, and overall cost notes
+   */
+  costNotes?: string;
+  /**
    * @minItems 1
-   * @maxItems 5
+   * @maxItems 10
    */
   destinations:
     | [
@@ -270,24 +270,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -297,20 +319,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -330,24 +422,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -357,20 +471,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -388,24 +572,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -415,20 +621,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -448,24 +724,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -475,20 +773,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -506,24 +874,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -533,20 +923,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -564,24 +1024,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -591,20 +1073,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -624,24 +1176,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -651,20 +1225,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -682,24 +1326,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -709,20 +1375,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -740,24 +1476,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -767,20 +1525,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -798,24 +1626,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -825,20 +1675,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -858,24 +1778,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -885,20 +1827,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -916,24 +1928,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -943,20 +1977,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -974,24 +2078,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -1001,20 +2127,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -1032,24 +2228,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -1059,20 +2277,90 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -1090,24 +2378,46 @@ export interface TripRecommendation {
           departureDate: string;
           numberOfNights: number;
           overview?: string;
+          alternativeDates?: string;
           accommodationOptions?: {
             id: string;
             priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
             hotel: {
               name: string;
-              rating: number;
-              pricePerNight: number;
+              rating?: number;
+              pricePerNight?: number;
               pointsPerNight?: number;
               loyaltyProgram?: string;
               location: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
-              bookingUrl: string;
+              bookingUrl?: string;
+              bookingInstructions?: string;
               detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
               tripadvisorId?: string;
               /**
-               * HTTP or HTTPS URL
+               * HTTP/HTTPS URL or empty string when not provided
                */
               tripadvisorUrl?: string;
               [k: string]: any | undefined;
@@ -1117,20 +2427,6100 @@ export interface TripRecommendation {
           recommendedActivities?: {
             id: string;
             name: string;
-            description: string;
-            location: string;
-            estimatedCost: number;
-            estimatedDuration: string;
-            category: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
             [k: string]: any | undefined;
           }[];
           recommendedRestaurants?: {
             id: string;
             name: string;
-            cuisine: string;
-            location: string;
-            priceRange: '$' | '$$' | '$$$' | '$$$$';
-            description: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        }
+      ]
+    | [
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        }
+      ]
+    | [
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        }
+      ]
+    | [
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        }
+      ]
+    | [
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        }
+      ]
+    | [
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            [k: string]: any | undefined;
+          }[];
+          [k: string]: any | undefined;
+        },
+        {
+          id: string;
+          cityName: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          arrivalDate: string;
+          /**
+           * ISO 8601 date format (YYYY-MM-DD)
+           */
+          departureDate: string;
+          numberOfNights: number;
+          overview?: string;
+          alternativeDates?: string;
+          accommodationOptions?: {
+            id: string;
+            priority: number;
+            bookingInstructions?: string;
+            selectedOption?: boolean;
+            recommendedReason?: string;
+            totalCost?: {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
+            hotel: {
+              name: string;
+              rating?: number;
+              pricePerNight?: number;
+              pointsPerNight?: number;
+              loyaltyProgram?: string;
+              location: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              bookingUrl?: string;
+              bookingInstructions?: string;
+              detailedDescription?: string;
+              amenities?: string[];
+              cancellationPolicy?: string;
+              contactInfo?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              photoUrl?: string;
+              photos?: string[];
+              tripadvisorId?: string;
+              /**
+               * HTTP/HTTPS URL or empty string when not provided
+               */
+              tripadvisorUrl?: string;
+              [k: string]: any | undefined;
+            };
+            [k: string]: any | undefined;
+          }[];
+          recommendedActivities?: {
+            id: string;
+            name: string;
+            description?: string;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  pointsAmount?: number;
+                  pointsProgram?: string;
+                  [k: string]: any | undefined;
+                };
+            estimatedDuration?: string;
+            category?: string;
+            priority?: number;
+            bestTimeToVisit?: string;
+            bookingRequired?: boolean;
+            bookingInstructions?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            bookingUrl?: string;
+            [k: string]: any | undefined;
+          }[];
+          recommendedRestaurants?: {
+            id: string;
+            name: string;
+            cuisine?: string;
+            mealType?: string;
+            priority?: number;
+            location?:
+              | string
+              | {
+                  name?: string;
+                  address?: string;
+                  [k: string]: any | undefined;
+                };
+            priceRange?: '$' | '$$' | '$$$' | '$$$$' | '';
+            estimatedCost?:
+              | number
+              | {
+                  paymentType?: string;
+                  cashAmount?: number;
+                  [k: string]: any | undefined;
+                };
+            description?: string;
+            reservationRequired?: boolean;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            reservationUrl?: string;
+            reservationInstructions?: string;
+            specialties?: string;
+            tips?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            yelpUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            tripadvisorUrl?: string;
+            /**
+             * HTTP/HTTPS URL or empty string when not provided
+             */
+            website?: string;
             [k: string]: any | undefined;
           }[];
           [k: string]: any | undefined;
@@ -1142,13 +8532,79 @@ export interface TripRecommendation {
       fromCity?: string;
       toCity?: string;
       departureDate?: string;
+      dateRange?: string;
       segmentType?: string;
+      notes?: string;
+      recommendedOption?: string;
       transportOptions?: {
         id?: string;
-        type?: 'flight' | 'train' | 'bus' | 'ferry' | 'car_rental';
+        transportType?: 'flight' | 'train' | 'bus' | 'ferry' | 'car' | 'car_rental';
+        type?: 'flight' | 'train' | 'bus' | 'ferry' | 'car' | 'car_rental';
+        priority?: number;
+        duration?: string;
         bookingReference?: string;
-        cost?: number;
+        /**
+         * HTTP/HTTPS URL or empty string when not provided
+         */
+        bookingUrl?: string;
+        notes?: string;
+        isRoundTrip?: boolean;
+        linkedSegmentId?: string;
+        recommendedSelection?: boolean;
+        cost?:
+          | number
+          | {
+              paymentType?: string;
+              cashAmount?: number;
+              totalCashValue?: number;
+              pointsAmount?: number;
+              pointsProgram?: string;
+              notes?: string;
+              [k: string]: any | undefined;
+            };
         details?: {
+          flightNumber?: string;
+          airline?: string;
+          departureAirportName?: string;
+          arrivalAirportName?: string;
+          class?: string;
+          aircraft?: string;
+          operator?: string;
+          trainNumber?: string;
+          departureStation?: string;
+          arrivalStation?: string;
+          departureTerminal?: string;
+          arrivalTerminal?: string;
+          departureTime?: string;
+          arrivalTime?: string;
+          company?: string;
+          pickupLocation?: string;
+          dropoffLocation?: string;
+          details?: {
+            departure?: {
+              airportCode?: string;
+              time?: string;
+              date?: string;
+              [k: string]: any | undefined;
+            };
+            arrival?: {
+              airportCode?: string;
+              time?: string;
+              date?: string;
+              [k: string]: any | undefined;
+            };
+            route?: string;
+            showDateChange?: string;
+            layovers?: {
+              airportCode?: string;
+              airportName?: string;
+              duration?: string;
+              flightNumber?: string;
+              airline?: string;
+              [k: string]: any | undefined;
+            }[];
+            [k: string]: any | undefined;
+          };
           [k: string]: any | undefined;
         };
         [k: string]: any | undefined;
@@ -1173,11 +8629,14 @@ export interface TripRecommendation {
      * ISO 4217 currency code (3 uppercase letters)
      */
     currency: string;
+    pointsUsed?: {
+      [k: string]: number | undefined;
+    };
     [k: string]: any | undefined;
   };
   bookingLinks?: {
     /**
-     * HTTP or HTTPS URL
+     * HTTP/HTTPS URL or empty string when not provided
      */
     flights?: string;
     hotels?: string[];
@@ -1195,7 +8654,6 @@ export interface TripRecommendation {
   [k: string]: any | undefined;
 }
 
-
 // CommonTypes
 /**
  * Shared type definitions used across all WanderMint schemas
@@ -1203,4 +8661,3 @@ export interface TripRecommendation {
 export interface CommonTypes {
   [k: string]: any | undefined;
 }
-

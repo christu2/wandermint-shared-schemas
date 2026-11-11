@@ -52,12 +52,15 @@ async function generateTypes() {
 
 `;
 
+    const emittedTypeNames = new Set();
+
     for (const schema of schemas) {
       const schemaPath = path.join(SCHEMAS_DIR, schema.file);
       console.log(`Generating ${schema.name}...`);
 
-      const ts = await compileFromFile(schemaPath, {
+      let ts = await compileFromFile(schemaPath, {
         bannerComment: ``,
+        cwd: SCHEMAS_DIR,
         style: {
           singleQuote: true,
           semi: true
@@ -66,7 +69,18 @@ async function generateTypes() {
         strictIndexSignatures: true
       });
 
-      allTypes += `\n// ${schema.name}\n${ts}\n`;
+      // Deduplicate top-level exported type aliases already emitted from referenced schemas
+      for (const existing of emittedTypeNames) {
+        const dupRegex = new RegExp(`(?:/\\*\\*[\\s\\S]*?\\*/\\s*)?export type ${existing}\\s*=[^;]+;\\n?`, 'g');
+        ts = ts.replace(dupRegex, '');
+      }
+
+      const typeMatches = ts.matchAll(/export (?:type|interface) (\w+)/g);
+      for (const m of typeMatches) {
+        emittedTypeNames.add(m[1]);
+      }
+
+      allTypes += `\n// ${schema.name}\n${ts.trim()}\n`;
     }
 
     fs.writeFileSync(OUTPUT_FILE, allTypes);

@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "description": "Single source of truth for WanderMint data schemas across iOS, Backend, and Admin",
   "main": "index.js",
-  "types": "types/generated/TypeScript/schemas.d.ts",
+  "types": "types/generated/TypeScript/schemas.ts",
   "files": [
     "index.js",
     "schemas/",
