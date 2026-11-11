@@ -148,6 +148,164 @@ describe('Admin → Backend Contract: Recommendation Creation', () => {
     }
     expect(valid).toBe(true);
   });
+
+  test('Admin & AI Copilot send rich points-and-cash recommendation with nested flight details', () => {
+    const richAdminRecommendation = {
+      id: 'rec-points-789',
+      tripOverview: 'Paris & London Business Class Points Strategy',
+      costNotes: 'Transfer 100k Chase Ultimate Rewards to Air France Flying Blue and 135k Chase UR to World of Hyatt.',
+      destinations: [
+        {
+          id: 'dest-paris',
+          cityName: 'Paris',
+          arrivalDate: '2026-05-12',
+          departureDate: '2026-05-15',
+          numberOfNights: 3,
+          overview: '3 nights in central Paris near Place Vendôme.',
+          accommodationOptions: [
+            {
+              id: 'acc-hyatt',
+              priority: 1,
+              selectedOption: true,
+              bookingInstructions: 'Transfer 135,000 Chase UR points to Hyatt and book Standard Suite or King Bed.',
+              totalCost: {
+                paymentType: 'points',
+                cashAmount: 0,
+                pointsAmount: 135000,
+                pointsProgram: 'World of Hyatt'
+              },
+              hotel: {
+                name: 'Park Hyatt Paris-Vendôme',
+                rating: 5,
+                pricePerNight: 0,
+                pointsPerNight: 45000,
+                loyaltyProgram: 'World of Hyatt',
+                location: '5 Rue de la Paix, 75002 Paris, France',
+                bookingUrl: '',
+                bookingInstructions: 'Book directly on hyatt.com after instant Chase transfer.',
+                detailedDescription: 'Five-star palace hotel in the heart of Paris.',
+                amenities: ['Spa', 'Concierge', 'Globalist Breakfast'],
+                cancellationPolicy: 'Free cancellation up to 48 hours prior',
+                photoUrl: 'https://images.unsplash.com/photo-1566073771259-6a8506099945'
+              }
+            }
+          ],
+          recommendedActivities: [
+            {
+              id: 'act-louvre',
+              name: 'Musée du Louvre Evening Tour',
+              description: 'Private or small-group evening tour',
+              location: { name: 'Louvre Museum', address: 'Rue de Rivoli, 75001 Paris' },
+              estimatedCost: { paymentType: 'cash', cashAmount: 65 },
+              estimatedDuration: '3 hours',
+              category: 'Cultural',
+              priority: 1,
+              bestTimeToVisit: 'Wednesday or Friday evening',
+              bookingRequired: true,
+              bookingInstructions: 'Book timed entry 60 days out',
+              tips: 'Enter via Carrousel du Louvre underground entrance to skip the Pyramid line.',
+              website: 'https://www.louvre.fr',
+              tripadvisorUrl: ''
+            }
+          ],
+          recommendedRestaurants: [
+            {
+              id: 'rest-comptoir',
+              name: 'Le Comptoir du Relais',
+              cuisine: 'French Bistro',
+              mealType: 'Dinner',
+              priority: 1,
+              location: { name: 'Saint-Germain-des-Prés', address: '9 Carrefour de l\'Odéon, 75006 Paris' },
+              priceRange: '$$$',
+              estimatedCost: { paymentType: 'cash', cashAmount: 140 },
+              description: 'Classic Saint-Germain bistro by Yves Camdeborde.',
+              reservationRequired: false,
+              reservationUrl: '',
+              reservationInstructions: 'Walk-ins for dinner; arrive by 6:45 PM.',
+              specialties: 'Duck confit, terrine de campagne',
+              tips: 'Ask for a sidewalk table if weather is warm.',
+              yelpUrl: ''
+            }
+          ]
+        }
+      ],
+      logistics: {
+        transportSegments: [
+          {
+            id: 'seg-outbound',
+            fromCity: 'New York (JFK)',
+            toCity: 'Paris (CDG)',
+            departureDate: '2026-05-11',
+            transportOptions: [
+              {
+                id: 'opt-af11',
+                transportType: 'flight',
+                priority: 1,
+                duration: '7h 15m',
+                bookingUrl: 'https://wwws.airfrance.us',
+                notes: 'Transfer Chase UR or Amex MR to Flying Blue.',
+                isRoundTrip: false,
+                recommendedSelection: true,
+                cost: {
+                  paymentType: 'hybrid',
+                  cashAmount: 210,
+                  totalCashValue: 210,
+                  pointsAmount: 50000,
+                  pointsProgram: 'Air France Flying Blue'
+                },
+                details: {
+                  flightNumber: 'AF 11',
+                  airline: 'Air France',
+                  departureAirportName: 'John F. Kennedy International Airport',
+                  arrivalAirportName: 'Charles de Gaulle Airport',
+                  class: 'Business',
+                  aircraft: 'Boeing 777-300ER',
+                  details: {
+                    departure: {
+                      airportCode: 'JFK',
+                      time: '19:30',
+                      date: '2026-05-11'
+                    },
+                    arrival: {
+                      airportCode: 'CDG',
+                      time: '08:45',
+                      date: '2026-05-12'
+                    },
+                    route: 'JFK → CDG',
+                    showDateChange: '+1 day'
+                  }
+                }
+              }
+            ]
+          }
+        ],
+        bookingDeadlines: [],
+        generalInstructions: 'Check Flying Blue award space before transferring points.'
+      },
+      totalCost: {
+        totalEstimate: 415,
+        flights: 210,
+        accommodation: 0,
+        activities: 65,
+        food: 140,
+        localTransport: 0,
+        miscellaneous: 0,
+        currency: 'USD',
+        pointsUsed: {
+          'Air France Flying Blue': 50000,
+          'World of Hyatt': 135000
+        }
+      },
+      _schemaVersion: '2.1.0',
+      _lastModifiedBy: 'ai_copilot'
+    };
+
+    const valid = validateRecommendation(richAdminRecommendation);
+    if (!valid) {
+      console.error('Validation errors:', JSON.stringify(validateRecommendation.errors, null, 2));
+    }
+    expect(valid).toBe(true);
+  });
 });
 
 describe('Admin → Backend Contract: Invalid Recommendations', () => {

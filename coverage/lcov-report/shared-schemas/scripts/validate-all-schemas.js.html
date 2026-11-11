@@ -25,14 +25,14 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>0/41</span>
+                <span class='fraction'>0/45</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/2</span>
+                <span class='fraction'>0/4</span>
             </div>
         
             
@@ -46,7 +46,7 @@
             <div class='fl pad1y space-right2'>
                 <span class="strong">0% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>0/38</span>
+                <span class='fraction'>0/42</span>
             </div>
         
             
@@ -131,7 +131,10 @@
 <a name='L66'></a><a href='#L66'>66</a>
 <a name='L67'></a><a href='#L67'>67</a>
 <a name='L68'></a><a href='#L68'>68</a>
-<a name='L69'></a><a href='#L69'>69</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L69'></a><a href='#L69'>69</a>
+<a name='L70'></a><a href='#L70'>70</a>
+<a name='L71'></a><a href='#L71'>71</a>
+<a name='L72'></a><a href='#L72'>72</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -158,17 +161,12 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -179,6 +177,14 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
@@ -226,31 +232,34 @@ const schemaFiles = <span class="cstat-no" title="statement not covered" >fs.rea
 &nbsp;
 let allValid = <span class="cstat-no" title="statement not covered" >true;</span>
 const validatedSchemas = <span class="cstat-no" title="statement not covered" >[];</span>
+const parsedSchemas = <span class="cstat-no" title="statement not covered" >[];</span>
 &nbsp;
+// First pass: parse JSON and register schemas so cross-file $refs resolve
 <span class="cstat-no" title="statement not covered" >for (const file of schemaFiles) {</span>
   const filePath = <span class="cstat-no" title="statement not covered" >path.join(SCHEMAS_DIR, file);</span>
-<span class="cstat-no" title="statement not covered" >  console.log(`Validating ${file}...`);</span>
-&nbsp;
 <span class="cstat-no" title="statement not covered" >  try {</span>
-    // Parse JSON
     const schemaContent = <span class="cstat-no" title="statement not covered" >fs.readFileSync(filePath, 'utf8');</span>
     const schema = <span class="cstat-no" title="statement not covered" >JSON.parse(schemaContent);</span>
-&nbsp;
-    // Validate schema structure
-<span class="cstat-no" title="statement not covered" >    try {</span>
-<span class="cstat-no" title="statement not covered" >      ajv.compile(schema);</span>
-<span class="cstat-no" title="statement not covered" >      console.log(`  ✅ ${file} is valid\n`);</span>
-<span class="cstat-no" title="statement not covered" >      validatedSchemas.push({ file, schema, valid: true });</span>
-    } catch (compileError) {
-<span class="cstat-no" title="statement not covered" >      console.error(`  ❌ ${file} has schema errors:`);</span>
-<span class="cstat-no" title="statement not covered" >      console.error(`     ${compileError.message}\n`);</span>
-<span class="cstat-no" title="statement not covered" >      validatedSchemas.push({ file, schema, valid: false, error: compileError });</span>
-<span class="cstat-no" title="statement not covered" >      allValid = false;</span>
-    }
+<span class="cstat-no" title="statement not covered" >    ajv.addSchema(schema, file);</span>
+<span class="cstat-no" title="statement not covered" >    parsedSchemas.push({ file, schema });</span>
   } catch (parseError) {
 <span class="cstat-no" title="statement not covered" >    console.error(`  ❌ ${file} has JSON syntax errors:`);</span>
 <span class="cstat-no" title="statement not covered" >    console.error(`     ${parseError.message}\n`);</span>
 <span class="cstat-no" title="statement not covered" >    validatedSchemas.push({ file, valid: false, error: parseError });</span>
+<span class="cstat-no" title="statement not covered" >    allValid = false;</span>
+  }
+}
+&nbsp;
+<span class="cstat-no" title="statement not covered" >for (const { file, schema } of parsedSchemas) {</span>
+<span class="cstat-no" title="statement not covered" >  console.log(`Validating ${file}...`);</span>
+<span class="cstat-no" title="statement not covered" >  try {</span>
+<span class="cstat-no" title="statement not covered" >    ajv.getSchema(file) || ajv.compile(schema);</span>
+<span class="cstat-no" title="statement not covered" >    console.log(`  ✅ ${file} is valid\n`);</span>
+<span class="cstat-no" title="statement not covered" >    validatedSchemas.push({ file, schema, valid: true });</span>
+  } catch (compileError) {
+<span class="cstat-no" title="statement not covered" >    console.error(`  ❌ ${file} has schema errors:`);</span>
+<span class="cstat-no" title="statement not covered" >    console.error(`     ${compileError.message}\n`);</span>
+<span class="cstat-no" title="statement not covered" >    validatedSchemas.push({ file, schema, valid: false, error: compileError });</span>
 <span class="cstat-no" title="statement not covered" >    allValid = false;</span>
   }
 }
@@ -274,7 +283,7 @@ const validatedSchemas = <span class="cstat-no" title="statement not covered" >[
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank" rel="noopener noreferrer">istanbul</a>
-                at 2026-05-04T02:54:06.302Z
+                at 2026-11-11T20:46:37.685Z
             </div>
         <script src="../../prettify.js"></script>
         <script>

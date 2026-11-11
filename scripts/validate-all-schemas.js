@@ -25,31 +25,34 @@ const schemaFiles = fs.readdirSync(SCHEMAS_DIR).filter(f => f.endsWith('.schema.
 
 let allValid = true;
 const validatedSchemas = [];
+const parsedSchemas = [];
 
+// First pass: parse JSON and register schemas so cross-file $refs resolve
 for (const file of schemaFiles) {
   const filePath = path.join(SCHEMAS_DIR, file);
-  console.log(`Validating ${file}...`);
-
   try {
-    // Parse JSON
     const schemaContent = fs.readFileSync(filePath, 'utf8');
     const schema = JSON.parse(schemaContent);
-
-    // Validate schema structure
-    try {
-      ajv.compile(schema);
-      console.log(`  ✅ ${file} is valid\n`);
-      validatedSchemas.push({ file, schema, valid: true });
-    } catch (compileError) {
-      console.error(`  ❌ ${file} has schema errors:`);
-      console.error(`     ${compileError.message}\n`);
-      validatedSchemas.push({ file, schema, valid: false, error: compileError });
-      allValid = false;
-    }
+    ajv.addSchema(schema, file);
+    parsedSchemas.push({ file, schema });
   } catch (parseError) {
     console.error(`  ❌ ${file} has JSON syntax errors:`);
     console.error(`     ${parseError.message}\n`);
     validatedSchemas.push({ file, valid: false, error: parseError });
+    allValid = false;
+  }
+}
+
+for (const { file, schema } of parsedSchemas) {
+  console.log(`Validating ${file}...`);
+  try {
+    ajv.getSchema(file) || ajv.compile(schema);
+    console.log(`  ✅ ${file} is valid\n`);
+    validatedSchemas.push({ file, schema, valid: true });
+  } catch (compileError) {
+    console.error(`  ❌ ${file} has schema errors:`);
+    console.error(`     ${compileError.message}\n`);
+    validatedSchemas.push({ file, schema, valid: false, error: compileError });
     allValid = false;
   }
 }

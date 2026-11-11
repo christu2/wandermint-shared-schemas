@@ -22,10 +22,15 @@
       "maxLength": 5000,
       "description": "Overall trip summary and highlights"
     },
+    "costNotes": {
+      "type": "string",
+      "maxLength": 10000,
+      "description": "Points transfer strategies, redemption instructions, and overall cost notes"
+    },
     "destinations": {
       "type": "array",
       "minItems": 1,
-      "maxItems": 5,
+      "maxItems": 10,
       "items": {
         "type": "object",
         "required": [
@@ -52,12 +57,16 @@
           },
           "numberOfNights": {
             "type": "integer",
-            "minimum": 1,
+            "minimum": 0,
             "maximum": 90
           },
           "overview": {
             "type": "string",
-            "maxLength": 2000
+            "maxLength": 5000
+          },
+          "alternativeDates": {
+            "type": "string",
+            "maxLength": 500
           },
           "accommodationOptions": {
             "type": "array",
@@ -71,9 +80,31 @@
                   "minimum": 1,
                   "maximum": 10
                 },
+                "bookingInstructions": {
+                  "type": "string",
+                  "maxLength": 5000
+                },
+                "selectedOption": {
+                  "type": "boolean"
+                },
+                "recommendedReason": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "totalCost": {
+                  "type": "object",
+                  "properties": {
+                    "paymentType": {"type": "string"},
+                    "cashAmount": {"type": "number", "minimum": 0},
+                    "totalCashValue": {"type": "number", "minimum": 0},
+                    "pointsAmount": {"type": "number", "minimum": 0},
+                    "pointsProgram": {"type": "string"},
+                    "notes": {"type": "string"}
+                  }
+                },
                 "hotel": {
                   "type": "object",
-                  "required": ["name", "rating", "pricePerNight", "location", "bookingUrl"],
+                  "required": ["name", "location"],
                   "properties": {
                     "name": {
                       "type": "string",
@@ -82,7 +113,7 @@
                     },
                     "rating": {
                       "type": "number",
-                      "minimum": 1,
+                      "minimum": 0,
                       "maximum": 5
                     },
                     "pricePerNight": {
@@ -104,14 +135,30 @@
                       "maxLength": 500
                     },
                     "bookingUrl": {
-                      "$ref": "common-types.schema.json#/$defs/URL"
+                      "$ref": "common-types.schema.json#/$defs/OptionalURL"
+                    },
+                    "bookingInstructions": {
+                      "type": "string",
+                      "maxLength": 5000
                     },
                     "detailedDescription": {
                       "type": "string",
                       "maxLength": 5000
                     },
+                    "amenities": {
+                      "type": "array",
+                      "items": {"type": "string"}
+                    },
+                    "cancellationPolicy": {
+                      "type": "string",
+                      "maxLength": 1000
+                    },
+                    "contactInfo": {
+                      "type": "string",
+                      "maxLength": 500
+                    },
                     "photoUrl": {
-                      "$ref": "common-types.schema.json#/$defs/URL"
+                      "$ref": "common-types.schema.json#/$defs/OptionalURL"
                     },
                     "photos": {
                       "type": "array",
@@ -121,10 +168,10 @@
                     },
                     "tripadvisorId": {
                       "type": "string",
-                      "maxLength": 50
+                      "maxLength": 100
                     },
                     "tripadvisorUrl": {
-                      "$ref": "common-types.schema.json#/$defs/URL"
+                      "$ref": "common-types.schema.json#/$defs/OptionalURL"
                     }
                   }
                 }
@@ -135,7 +182,7 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "name", "description", "location", "estimatedCost", "estimatedDuration", "category"],
+              "required": ["id", "name"],
               "properties": {
                 "id": {"type": "string"},
                 "name": {
@@ -148,14 +195,37 @@
                   "maxLength": 2000
                 },
                 "location": {
-                  "type": "string",
-                  "minLength": 1,
-                  "maxLength": 500
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {"type": "string"},
+                        "address": {"type": "string"}
+                      }
+                    }
+                  ]
                 },
                 "estimatedCost": {
-                  "type": "number",
-                  "minimum": 0,
-                  "maximum": 100000
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0,
+                      "maximum": 100000
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "paymentType": {"type": "string"},
+                        "cashAmount": {"type": "number", "minimum": 0},
+                        "pointsAmount": {"type": "number", "minimum": 0},
+                        "pointsProgram": {"type": "string"}
+                      }
+                    }
+                  ]
                 },
                 "estimatedDuration": {
                   "type": "string",
@@ -163,19 +233,39 @@
                 },
                 "category": {
                   "type": "string",
-                  "maxLength": 50
+                  "maxLength": 100
+                },
+                "priority": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10
+                },
+                "bestTimeToVisit": {
+                  "type": "string",
+                  "maxLength": 200
+                },
+                "bookingRequired": {
+                  "type": "boolean"
+                },
+                "bookingInstructions": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "tips": {
+                  "type": "string",
+                  "maxLength": 2000
                 },
                 "website": {
-                  "$ref": "common-types.schema.json#/$defs/URL"
+                  "$ref": "common-types.schema.json#/$defs/OptionalURL"
                 },
                 "yelpUrl": {
-                  "$ref": "common-types.schema.json#/$defs/URL"
+                  "$ref": "common-types.schema.json#/$defs/OptionalURL"
                 },
                 "tripadvisorUrl": {
-                  "$ref": "common-types.schema.json#/$defs/URL"
+                  "$ref": "common-types.schema.json#/$defs/OptionalURL"
                 },
                 "bookingUrl": {
-                  "$ref": "common-types.schema.json#/$defs/URL"
+                  "$ref": "common-types.schema.json#/$defs/OptionalURL"
                 }
               }
             }
@@ -184,7 +274,7 @@
             "type": "array",
             "items": {
               "type": "object",
-              "required": ["id", "name", "cuisine", "location", "priceRange", "description"],
+              "required": ["id", "name"],
               "properties": {
                 "id": {"type": "string"},
                 "name": {
@@ -196,24 +286,79 @@
                   "type": "string",
                   "maxLength": 100
                 },
-                "location": {
+                "mealType": {
                   "type": "string",
-                  "minLength": 1,
-                  "maxLength": 500
+                  "maxLength": 50
+                },
+                "priority": {
+                  "type": "integer",
+                  "minimum": 1,
+                  "maximum": 10
+                },
+                "location": {
+                  "anyOf": [
+                    {
+                      "type": "string",
+                      "maxLength": 500
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "name": {"type": "string"},
+                        "address": {"type": "string"}
+                      }
+                    }
+                  ]
                 },
                 "priceRange": {
                   "type": "string",
-                  "enum": ["$", "$$", "$$$", "$$$$"]
+                  "enum": ["$", "$$", "$$$", "$$$$", ""]
+                },
+                "estimatedCost": {
+                  "anyOf": [
+                    {
+                      "type": "number",
+                      "minimum": 0
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "paymentType": {"type": "string"},
+                        "cashAmount": {"type": "number", "minimum": 0}
+                      }
+                    }
+                  ]
                 },
                 "description": {
                   "type": "string",
                   "maxLength": 2000
                 },
+                "reservationRequired": {
+                  "type": "boolean"
+                },
+                "reservationUrl": {
+                  "$ref": "common-types.schema.json#/$defs/OptionalURL"
+                },
+                "reservationInstructions": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
+                "specialties": {
+                  "type": "string",
+                  "maxLength": 1000
+                },
+                "tips": {
+                  "type": "string",
+                  "maxLength": 2000
+                },
                 "yelpUrl": {
-                  "$ref": "common-types.schema.json#/$defs/URL"
+                  "$ref": "common-types.schema.json#/$defs/OptionalURL"
+                },
+                "tripadvisorUrl": {
+                  "$ref": "common-types.schema.json#/$defs/OptionalURL"
                 },
                 "website": {
-                  "$ref": "common-types.schema.json#/$defs/URL"
+                  "$ref": "common-types.schema.json#/$defs/OptionalURL"
                 }
               }
             }
@@ -234,17 +379,100 @@
               "fromCity": {"type": "string"},
               "toCity": {"type": "string"},
               "departureDate": {"type": "string"},
+              "dateRange": {"type": "string"},
               "segmentType": {"type": "string"},
+              "notes": {"type": "string"},
+              "recommendedOption": {"type": "string"},
               "transportOptions": {
                 "type": "array",
                 "items": {
                   "type": "object",
                   "properties": {
                     "id": {"type": "string"},
-                    "type": {"type": "string", "enum": ["flight", "train", "bus", "ferry", "car_rental"]},
+                    "transportType": {"type": "string", "enum": ["flight", "train", "bus", "ferry", "car", "car_rental"]},
+                    "type": {"type": "string", "enum": ["flight", "train", "bus", "ferry", "car", "car_rental"]},
+                    "priority": {"type": "integer", "minimum": 1, "maximum": 10},
+                    "duration": {"type": "string"},
                     "bookingReference": {"type": "string"},
-                    "cost": {"type": "number"},
-                    "details": {"type": "object"}
+                    "bookingUrl": {"$ref": "common-types.schema.json#/$defs/OptionalURL"},
+                    "notes": {"type": "string"},
+                    "isRoundTrip": {"type": "boolean"},
+                    "linkedSegmentId": {"type": "string"},
+                    "recommendedSelection": {"type": "boolean"},
+                    "cost": {
+                      "anyOf": [
+                        {"type": "number", "minimum": 0},
+                        {
+                          "type": "object",
+                          "properties": {
+                            "paymentType": {"type": "string"},
+                            "cashAmount": {"type": "number", "minimum": 0},
+                            "totalCashValue": {"type": "number", "minimum": 0},
+                            "pointsAmount": {"type": "number", "minimum": 0},
+                            "pointsProgram": {"type": "string"},
+                            "notes": {"type": "string"}
+                          }
+                        }
+                      ]
+                    },
+                    "details": {
+                      "type": "object",
+                      "properties": {
+                        "flightNumber": {"type": "string"},
+                        "airline": {"type": "string"},
+                        "departureAirportName": {"type": "string"},
+                        "arrivalAirportName": {"type": "string"},
+                        "class": {"type": "string"},
+                        "aircraft": {"type": "string"},
+                        "operator": {"type": "string"},
+                        "trainNumber": {"type": "string"},
+                        "departureStation": {"type": "string"},
+                        "arrivalStation": {"type": "string"},
+                        "departureTerminal": {"type": "string"},
+                        "arrivalTerminal": {"type": "string"},
+                        "departureTime": {"type": "string"},
+                        "arrivalTime": {"type": "string"},
+                        "company": {"type": "string"},
+                        "pickupLocation": {"type": "string"},
+                        "dropoffLocation": {"type": "string"},
+                        "details": {
+                          "type": "object",
+                          "properties": {
+                            "departure": {
+                              "type": "object",
+                              "properties": {
+                                "airportCode": {"type": "string"},
+                                "time": {"type": "string"},
+                                "date": {"type": "string"}
+                              }
+                            },
+                            "arrival": {
+                              "type": "object",
+                              "properties": {
+                                "airportCode": {"type": "string"},
+                                "time": {"type": "string"},
+                                "date": {"type": "string"}
+                              }
+                            },
+                            "route": {"type": "string"},
+                            "showDateChange": {"type": "string"},
+                            "layovers": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "properties": {
+                                  "airportCode": {"type": "string"},
+                                  "airportName": {"type": "string"},
+                                  "duration": {"type": "string"},
+                                  "flightNumber": {"type": "string"},
+                                  "airline": {"type": "string"}
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -295,6 +523,13 @@
         },
         "currency": {
           "$ref": "common-types.schema.json#/$defs/CurrencyCode"
+        },
+        "pointsUsed": {
+          "type": "object",
+          "additionalProperties": {
+            "type": "number",
+            "minimum": 0
+          }
         }
       }
     },
@@ -302,12 +537,12 @@
       "type": "object",
       "properties": {
         "flights": {
-          "$ref": "common-types.schema.json#/$defs/URL"
+          "$ref": "common-types.schema.json#/$defs/OptionalURL"
         },
         "hotels": {
           "type": "array",
           "items": {
-            "$ref": "common-types.schema.json#/$defs/URL"
+            "$ref": "common-types.schema.json#/$defs/OptionalURL"
           }
         }
       }
@@ -319,38 +554,35 @@
     "_schemaVersion": {
       "type": "string",
       "description": "Schema version for tracking compatibility",
-      "examples": ["2.0.0"]
+      "examples": ["2.1.0"]
     },
     "_lastModifiedBy": {
       "type": "string",
       "description": "Component that last modified this recommendation",
-      "examples": ["admin_dashboard", "ios_app"]
+      "examples": ["admin_dashboard", "ios_app", "ai_copilot"]
     }
   },
-  "version": "2.0.0",
-  "lastUpdated": "2026-05-03",
+  "version": "2.1.0",
+  "lastUpdated": "2026-11-11",
   "changelog": [
+    {
+      "version": "2.1.0",
+      "date": "2026-11-11",
+      "changes": [
+        "Aligned recommendation schema with full AdminDestinationBasedRecommendation structure",
+        "Added costNotes, pointsUsed, transportType, nested flight/train/car details, and cash/points cost objects",
+        "Added rich hotel, activity, and restaurant fields (bookingInstructions, tips, mealType, specialties, OptionalURL)"
+      ],
+      "breaking": false
+    },
     {
       "version": "2.0.0",
       "date": "2026-05-03",
       "changes": [
         "BREAKING: Added logistics as required field at root level",
-        "BREAKING: Updated totalCost required fields to include all cost categories",
-        "Updated hotel priority maximum from 5 to 10",
-        "Updated hotel required fields to include pricePerNight and bookingUrl",
-        "Added _schemaVersion and _lastModifiedBy metadata fields",
-        "Added complete logistics.transportSegments schema definition"
+        "BREAKING: Updated totalCost required fields to include all cost categories"
       ],
       "breaking": true
-    },
-    {
-      "version": "1.0.0",
-      "date": "2026-01-02",
-      "changes": [
-        "Initial recommendation schema definition",
-        "Aligned with Backend validation and iOS parsing"
-      ],
-      "breaking": false
     }
   ]
 }

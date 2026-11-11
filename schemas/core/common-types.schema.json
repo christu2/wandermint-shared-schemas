@@ -55,6 +55,13 @@
         "http://localhost:3000"
       ]
     },
+    "OptionalURL": {
+      "anyOf": [
+        { "$ref": "#/$defs/URL" },
+        { "type": "string", "maxLength": 0 }
+      ],
+      "description": "HTTP/HTTPS URL or empty string when not provided"
+    },
     "Email": {
       "type": "string",
       "format": "email",
